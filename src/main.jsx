@@ -9,10 +9,17 @@ const isDirectHtmlPath = pathname.endsWith('.html') && pathname !== '/index.html
 const baseHref = new URL(getBaseHref(), window.location.origin).pathname;
 const normalizedBasePath = baseHref.endsWith('/') ? baseHref.slice(0, -1) || '/' : baseHref;
 const isAlkashPath = pathname.startsWith(normalizedBasePath);
-const accessKey = localStorage.getItem('mwangaza_access_code_unlocked');
 const normalizeCode = (code) => (code || '').toUpperCase().replace(/[^A-Z0-9]/g, '');
-const accessCode = normalizeCode(localStorage.getItem('mwangaza_access_code_value'));
 const allowedCodes = ['YNKALK2026', 'YNK19912026'];
+const accessCodeFromQuery = normalizeCode(new URLSearchParams(window.location.search).get('ac'));
+
+if (allowedCodes.includes(accessCodeFromQuery)) {
+    localStorage.setItem('mwangaza_access_code_unlocked', 'true');
+    localStorage.setItem('mwangaza_access_code_value', accessCodeFromQuery);
+}
+
+const accessKey = localStorage.getItem('mwangaza_access_code_unlocked');
+const accessCode = normalizeCode(localStorage.getItem('mwangaza_access_code_value'));
 const hasValidPortalAccess = accessKey === 'true' && allowedCodes.includes(accessCode);
 
 if (!import.meta.env.DEV && isAlkashPath && !isDirectHtmlPath && !hasValidPortalAccess) {
