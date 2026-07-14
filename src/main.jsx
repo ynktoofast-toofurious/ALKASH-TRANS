@@ -8,6 +8,15 @@ const { pathname } = window.location;
 const isDirectHtmlPath = pathname.endsWith('.html') && pathname !== '/index.html';
 const baseHref = new URL(getBaseHref(), window.location.origin).pathname;
 const normalizedBasePath = baseHref.endsWith('/') ? baseHref.slice(0, -1) || '/' : baseHref;
+const isAlkashPath = pathname.startsWith(normalizedBasePath);
+const accessKey = localStorage.getItem('mwangaza_access_code_unlocked');
+const accessCode = localStorage.getItem('mwangaza_access_code_value');
+const allowedCodes = ['YNK-ACCESS-2026', 'YNK19912026'];
+const hasValidPortalAccess = accessKey === 'true' && allowedCodes.includes(accessCode || '');
+
+if (!import.meta.env.DEV && isAlkashPath && !isDirectHtmlPath && !hasValidPortalAccess) {
+    window.location.replace(getPublicHomeHref());
+}
 
 if (isDirectHtmlPath) {
     window.location.replace(getPublicHomeHref());
