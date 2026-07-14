@@ -19,9 +19,16 @@ export const pageByRouteToken = Object.fromEntries(
 );
 
 const basePath = import.meta.env.BASE_URL || '/';
+const publicHomeHref = import.meta.env.DEV
+    ? basePath
+    : (import.meta.env.VITE_PUBLIC_HOME_URL || 'https://www.mysmartwork.tech/');
 
 export function getBaseHref() {
     return basePath;
+}
+
+export function getPublicHomeHref() {
+    return publicHomeHref;
 }
 
 export function getAssetHref(assetPath) {

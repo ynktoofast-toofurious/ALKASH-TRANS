@@ -1,7 +1,7 @@
 import React from 'react';
 import ReactDOM from 'react-dom/client';
 import { renderPageApp } from './site';
-import { getBaseHref, getMaskedHref, pageByRouteToken } from './routes';
+import { getBaseHref, getMaskedHref, getPublicHomeHref, pageByRouteToken } from './routes';
 import './styles.css';
 
 const { pathname } = window.location;
@@ -10,7 +10,7 @@ const baseHref = new URL(getBaseHref(), window.location.origin).pathname;
 const normalizedBasePath = baseHref.endsWith('/') ? baseHref.slice(0, -1) || '/' : baseHref;
 
 if (isDirectHtmlPath) {
-    window.location.replace(getBaseHref());
+    window.location.replace(getPublicHomeHref());
 }
 
 const routeToken = new URLSearchParams(window.location.search).get('k');
