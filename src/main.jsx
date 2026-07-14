@@ -10,9 +10,10 @@ const baseHref = new URL(getBaseHref(), window.location.origin).pathname;
 const normalizedBasePath = baseHref.endsWith('/') ? baseHref.slice(0, -1) || '/' : baseHref;
 const isAlkashPath = pathname.startsWith(normalizedBasePath);
 const accessKey = localStorage.getItem('mwangaza_access_code_unlocked');
-const accessCode = localStorage.getItem('mwangaza_access_code_value');
-const allowedCodes = ['YNK-ALK-2026', 'YNK19912026'];
-const hasValidPortalAccess = accessKey === 'true' && allowedCodes.includes(accessCode || '');
+const normalizeCode = (code) => (code || '').toUpperCase().replace(/[^A-Z0-9]/g, '');
+const accessCode = normalizeCode(localStorage.getItem('mwangaza_access_code_value'));
+const allowedCodes = ['YNKALK2026', 'YNK19912026'];
+const hasValidPortalAccess = accessKey === 'true' && allowedCodes.includes(accessCode);
 
 if (!import.meta.env.DEV && isAlkashPath && !isDirectHtmlPath && !hasValidPortalAccess) {
     window.location.replace(getPublicHomeHref());
