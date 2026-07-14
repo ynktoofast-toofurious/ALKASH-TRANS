@@ -11,7 +11,7 @@ const normalizedBasePath = baseHref.endsWith('/') ? baseHref.slice(0, -1) || '/'
 const isAlkashPath = pathname.startsWith(normalizedBasePath);
 const accessKey = localStorage.getItem('mwangaza_access_code_unlocked');
 const accessCode = localStorage.getItem('mwangaza_access_code_value');
-const allowedCodes = ['YNK-ACCESS-2026', 'YNK19912026'];
+const allowedCodes = ['YNK-ALK-2026', 'YNK19912026'];
 const hasValidPortalAccess = accessKey === 'true' && allowedCodes.includes(accessCode || '');
 
 if (!import.meta.env.DEV && isAlkashPath && !isDirectHtmlPath && !hasValidPortalAccess) {
