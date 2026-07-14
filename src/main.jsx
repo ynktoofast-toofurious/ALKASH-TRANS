@@ -1,0 +1,43 @@
+import React from 'react';
+import ReactDOM from 'react-dom/client';
+import { renderPageApp } from './site';
+import { getBaseHref, getMaskedHref, pageByRouteToken } from './routes';
+import './styles.css';
+
+const { pathname } = window.location;
+const isDirectHtmlPath = pathname.endsWith('.html') && pathname !== '/index.html';
+const baseHref = new URL(getBaseHref(), window.location.origin).pathname;
+const normalizedBasePath = baseHref.endsWith('/') ? baseHref.slice(0, -1) || '/' : baseHref;
+
+if (isDirectHtmlPath) {
+    window.location.replace(getBaseHref());
+}
+
+const routeToken = new URLSearchParams(window.location.search).get('k');
+const tokenPage = routeToken ? pageByRouteToken[routeToken] : null;
+const page = tokenPage || document.body.dataset.page || 'home';
+const isCanonicalPath = pathname === normalizedBasePath || pathname === `${normalizedBasePath}/index.html`;
+
+if (!isDirectHtmlPath && !isCanonicalPath) {
+    const canonicalHref = getMaskedHref(page);
+    const currentHref = `${window.location.pathname}${window.location.search}`;
+
+    if (canonicalHref !== currentHref) {
+        window.location.replace(canonicalHref);
+    }
+}
+
+if (!isDirectHtmlPath && pathname === `${normalizedBasePath}/index.html`) {
+    const canonicalHref = getMaskedHref(page);
+    const currentHref = `${window.location.pathname}${window.location.search}`;
+
+    if (canonicalHref !== currentHref) {
+        window.location.replace(canonicalHref);
+    }
+}
+
+ReactDOM.createRoot(document.getElementById('root')).render(
+    <React.StrictMode>
+        {renderPageApp(page)}
+    </React.StrictMode>
+);
